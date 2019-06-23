@@ -15,9 +15,17 @@ namespace ASPNETLearning_EmployeeManagement.Controllers
         {
             _employeeRepository = employeeRepository;
         }
-        public string Index()
+        public ViewResult Index()
         {
-            return _employeeRepository.GetEmployee(1).Name;
+            var employees = _employeeRepository.GetAllEmployees();
+            return View(employees);
+        }
+
+        public ViewResult Details()
+        {
+            Employee model = _employeeRepository.GetEmployee(2);
+            ViewData["PageTitle"] = "Employee Details";
+            return View(model);
         }
     }
 }
