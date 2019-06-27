@@ -25,9 +25,15 @@ namespace ASPNETLearning_EmployeeManagement
                 app.UseDeveloperExceptionPage();
             }
 
+            app.Use(async (context, next) =>
+            {
+                await context.Response.WriteAsync(System.Diagnostics.Process.GetCurrentProcess().ProcessName);
+                await next();
+            });
+
             app.Run(async (context) =>
             {
-                await context.Response.WriteAsync("Hello World!");
+                await context.Response.WriteAsync("Test");
             });
         }
     }
