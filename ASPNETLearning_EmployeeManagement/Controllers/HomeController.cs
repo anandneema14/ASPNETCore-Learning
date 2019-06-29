@@ -40,5 +40,24 @@ namespace ASPNETLearning_EmployeeManagement.Controllers
             ViewData["PageTitle"] = "Employee Details";
             return View(model);
         }
+
+        [Route("[action]")]
+        public ViewResult Create()
+        {
+            return View();
+        }
+
+        [Route("[action]")]
+        [HttpPost]
+        public IActionResult Create(Employee employee)
+        {
+            if (ModelState.IsValid)
+            {
+                Employee emp = _employeeRepository.AddEmployee(employee);
+                return RedirectToAction("Details", new { Id = emp.Id });
+            }
+
+            return View();
+        }
     }
 }
