@@ -30,7 +30,11 @@ namespace ASPNETLearning_EmployeeManagement
             }
 
             app.UseStaticFiles();
-            app.UseMvcWithDefaultRoute();
+
+            //app.UseMvcWithDefaultRoute();
+            app.UseMvc(routes=> {
+                routes.MapRoute("Default", "{controller=Home}/{action=Index}/{Id?}");
+            });
         }
     }
 }

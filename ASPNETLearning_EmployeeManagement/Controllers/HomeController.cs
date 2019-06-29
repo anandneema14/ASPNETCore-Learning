@@ -7,6 +7,13 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ASPNETLearning_EmployeeManagement.Controllers
 {
+    //[Route("Home")]
+
+    //In below approach of Attribute Routing, 
+    //Token inside Route parameter ([controller]) will take the value of the controller,
+    //and we no need to worry if we change the Controller name in future. 
+    //Same applies for Action methods also.
+    [Route("[controller]")]     
     public class HomeController : Controller
     {
         private IEmployeeRepository _employeeRepository;
@@ -15,15 +22,21 @@ namespace ASPNETLearning_EmployeeManagement.Controllers
         {
             _employeeRepository = employeeRepository;
         }
+
+        [Route("")]
+        [Route("~/")] //This is to handle for navigatng through root URL.
         public ViewResult Index()
         {
             var employees = _employeeRepository.GetAllEmployees();
             return View(employees);
         }
 
-        public ViewResult Details()
+        [Route("[action]/{id?}")]
+        public ViewResult Details(int? Id)
         {
-            Employee model = _employeeRepository.GetEmployee(2);
+            //Parameter in GetEmployee method is called as Colesace operator, 
+            //and it tells that if Id is null it will take 1 as default value.
+            Employee model = _employeeRepository.GetEmployee(Id??1);    
             ViewData["PageTitle"] = "Employee Details";
             return View(model);
         }
