@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Employee Details";
+    var photoPath = "~/images/" + (Model.PhotoPath ?? "noimage.jpg");
 }
 
 <h1>@ViewData["PageTitle"]</h1>
@@ -17,7 +18,7 @@
                     if at all the content of image changes on the server, it will download from the server 
                     or else it will serve the image from the browser cache. 
                     This behaviour is called as Cache Busting behaviour-->
-                <img class="card-img-top" src="~/images/noimage.jpg" asp-append-version="true" />
+                <img class="card-img-top imageThumbnail" src="@photoPath" asp-append-version="true" />
                 <h4>Employee ID: @Model.Id</h4>
                 <h4>Email: @Model.Email</h4>
                 <h4>Department: @Model.Department</h4>

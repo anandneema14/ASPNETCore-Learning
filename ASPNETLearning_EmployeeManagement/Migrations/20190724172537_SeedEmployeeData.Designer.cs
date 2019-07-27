@@ -3,14 +3,16 @@ using ASPNETLearning_EmployeeManagement.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ASPNETLearning_EmployeeManagement.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190724172537_SeedEmployeeData")]
+    partial class SeedEmployeeData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -32,16 +34,12 @@ namespace ASPNETLearning_EmployeeManagement.Migrations
                     b.Property<string>("Name")
                         .IsRequired();
 
-                    b.Property<string>("PhotoPath");
-
                     b.HasKey("Id");
 
                     b.ToTable("Employees");
 
                     b.HasData(
-                        new { Id = 1, Department = 2, Email = "anand.neema14@gmail.com", Name = "Anand" },
-                        new { Id = 2, Department = 1, Email = "vidhianandneema@gmail.com", Name = "Vidhi" },
-                        new { Id = 3, Department = 4, Email = "anand.neema14@gmail.com", Name = "Aarav" }
+                        new { Id = 1, Department = 2, Email = "anand.neema14@gmail.com", Name = "Anand" }
                     );
                 });
 #pragma warning restore 612, 618

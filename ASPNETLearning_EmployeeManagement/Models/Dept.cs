@@ -10,6 +10,7 @@ namespace ASPNETLearning_EmployeeManagement.Models
         None,
         HR,
         IT,
-        Payroll
+        Payroll,
+        MD
     }
 }

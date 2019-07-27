@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using ASPNETLearning_EmployeeManagement.Models;
+using ASPNETLearning_EmployeeManagement.ViewModels;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ASPNETLearning_EmployeeManagement.Controllers
@@ -13,14 +16,17 @@ namespace ASPNETLearning_EmployeeManagement.Controllers
     //Token inside Route parameter ([controller]) will take the value of the controller,
     //and we no need to worry if we change the Controller name in future. 
     //Same applies for Action methods also.
-    [Route("[controller]")]     
+    [Route("[controller]")]
     public class HomeController : Controller
     {
         private IEmployeeRepository _employeeRepository;
 
-        public HomeController(IEmployeeRepository employeeRepository)
+        private readonly IHostingEnvironment HostingEnvironment;
+
+        public HomeController(IEmployeeRepository employeeRepository, IHostingEnvironment hostingEnvironment)
         {
             _employeeRepository = employeeRepository;
+            HostingEnvironment = hostingEnvironment;
         }
 
         [Route("")]
@@ -36,7 +42,7 @@ namespace ASPNETLearning_EmployeeManagement.Controllers
         {
             //Parameter in GetEmployee method is called as Colesace operator, 
             //and it tells that if Id is null it will take 1 as default value.
-            Employee model = _employeeRepository.GetEmployee(Id??1);    
+            Employee model = _employeeRepository.GetEmployee(Id ?? 1);
             ViewData["PageTitle"] = "Employee Details";
             return View(model);
         }
@@ -49,11 +55,26 @@ namespace ASPNETLearning_EmployeeManagement.Controllers
 
         [Route("[action]")]
         [HttpPost]
-        public IActionResult Create(Employee employee)
+        public IActionResult Create(EmployeeCreateViewModel employee)
         {
             if (ModelState.IsValid)
             {
-                Employee emp = _employeeRepository.AddEmployee(employee);
+                string uniqueFileName = null;
+                if (employee.Photo != null)
+                {
+                    string uploadFolder = Path.Combine(HostingEnvironment.WebRootPath, "images");
+                    uniqueFileName = Guid.NewGuid().ToString() + "_" + employee.Photo.FileName.Split("\\")[3];
+                    string filePath = Path.Combine(uploadFolder, uniqueFileName);
+                    employee.Photo.CopyTo(new FileStream(filePath,FileMode.Create));
+                }
+                Employee emp = new Employee
+                {
+                    Name = employee.Name,
+                    Email = employee.Email,
+                    Department = employee.Department,
+                    PhotoPath = uniqueFileName
+                };
+                _employeeRepository.AddEmployee(emp);
                 return RedirectToAction("Details", new { Id = emp.Id });
             }
 
