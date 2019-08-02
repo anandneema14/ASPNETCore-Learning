@@ -61,16 +61,28 @@ namespace ASPNETLearning_EmployeeManagement.Controllers
             if (ModelState.IsValid)
             {
                 string uniqueFileName = null;
-                if (employee.Photos != null && employee.Photos.Count > 0)
+
+                #region Uploading Multiple Files
+                //if (employee.Photos != null && employee.Photos.Count > 0)
+                //{
+                //    foreach (IFormFile photo in employee.Photos)
+                //    {
+                //        string uploadFolder = Path.Combine(HostingEnvironment.WebRootPath, "images");
+                //        uniqueFileName = Guid.NewGuid().ToString() + "_" + photo.FileName.Split("\\")[3];
+                //        string filePath = Path.Combine(uploadFolder, uniqueFileName);
+                //        photo.CopyTo(new FileStream(filePath, FileMode.Create));
+                //    }
+                //}
+                #endregion
+
+                if (employee.Photo != null)
                 {
-                    foreach (IFormFile photo in employee.Photos)
-                    {
-                        string uploadFolder = Path.Combine(HostingEnvironment.WebRootPath, "images");
-                        uniqueFileName = Guid.NewGuid().ToString() + "_" + photo.FileName.Split("\\")[3];
-                        string filePath = Path.Combine(uploadFolder, uniqueFileName);
-                        photo.CopyTo(new FileStream(filePath, FileMode.Create));
-                    }
+                    string uploadFolder = Path.Combine(HostingEnvironment.WebRootPath, "images");
+                    uniqueFileName = Guid.NewGuid().ToString() + "_" + employee.Photo.FileName.Split("\\")[3];
+                    string filePath = Path.Combine(uploadFolder, uniqueFileName);
+                    employee.Photo.CopyTo(new FileStream(filePath, FileMode.Create));
                 }
+
                 Employee emp = new Employee
                 {
                     Name = employee.Name,
