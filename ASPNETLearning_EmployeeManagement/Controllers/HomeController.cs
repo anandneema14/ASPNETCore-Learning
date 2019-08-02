@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using ASPNETLearning_EmployeeManagement.Models;
 using ASPNETLearning_EmployeeManagement.ViewModels;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ASPNETLearning_EmployeeManagement.Controllers
@@ -60,12 +61,15 @@ namespace ASPNETLearning_EmployeeManagement.Controllers
             if (ModelState.IsValid)
             {
                 string uniqueFileName = null;
-                if (employee.Photo != null)
+                if (employee.Photos != null && employee.Photos.Count > 0)
                 {
-                    string uploadFolder = Path.Combine(HostingEnvironment.WebRootPath, "images");
-                    uniqueFileName = Guid.NewGuid().ToString() + "_" + employee.Photo.FileName.Split("\\")[3];
-                    string filePath = Path.Combine(uploadFolder, uniqueFileName);
-                    employee.Photo.CopyTo(new FileStream(filePath,FileMode.Create));
+                    foreach (IFormFile photo in employee.Photos)
+                    {
+                        string uploadFolder = Path.Combine(HostingEnvironment.WebRootPath, "images");
+                        uniqueFileName = Guid.NewGuid().ToString() + "_" + photo.FileName.Split("\\")[3];
+                        string filePath = Path.Combine(uploadFolder, uniqueFileName);
+                        photo.CopyTo(new FileStream(filePath, FileMode.Create));
+                    }
                 }
                 Employee emp = new Employee
                 {

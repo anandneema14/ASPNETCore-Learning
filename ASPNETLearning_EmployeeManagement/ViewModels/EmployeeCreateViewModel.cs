@@ -24,6 +24,6 @@ namespace ASPNETLearning_EmployeeManagement.ViewModels
         ///File uploaded to the server can be accessed through ModelBinding using IFormFile Interface
         ///File Upload control on UI is also because of IFormFiel Interface
         /// </summary>
-        public IFormFile Photo { get; set; }
+        public List<IFormFile> Photos { get; set; }
     }
 }
