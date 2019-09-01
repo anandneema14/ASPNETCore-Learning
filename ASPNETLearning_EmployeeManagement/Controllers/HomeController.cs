@@ -96,5 +96,20 @@ namespace ASPNETLearning_EmployeeManagement.Controllers
 
             return View();
         }
+
+        [HttpGet]
+        public ViewResult Edit(int Id)
+        {
+            Employee emp = _employeeRepository.GetEmployee(Id);
+            EmployeeEditViewModel empData = new EmployeeEditViewModel
+            {
+                Name = emp.Name,
+                Id = emp.Id,
+                Email = emp.Email,
+                Department = emp.Department,
+                ExistingPhotoPath = emp.PhotoPath
+            };
+            return View(empData);
+        }
     }
 }
